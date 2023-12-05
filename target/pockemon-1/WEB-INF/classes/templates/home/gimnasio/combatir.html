@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head>
+    <title>Bienvenido a pockemones ciisa</title>
+</head>
+
+<body>
+    <div layout:fragment="pagina">
+        <div class='card w-90'>
+            <div class="panel-heading"
+                style="background-color: #0D6EFD; justify-content: left;display: flex;align-items: center; height: 60px;">
+                <h3 class="panel-title center" style="color:white">
+                    &nbsp;&nbsp;<i class="bi bi-card-list"></i>&nbsp;<h3 style="color:white" th:text="${gimnasio.nombreGimnasio}"></h3></h3>
+            </div>
+            <div class="col-md-12">
+                <div class='card-body'>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="md-form md-outline">
+                                <form id="formData" th:object="${pockemon}">
+                                    <label class="upper">
+                                        <h6><strong>Selecciona tu pockemon para combatir</strong></h6>
+                                    </label>
+                                    <select class="form-select" th:field="*{id}" th:onchange="seleccionPockemon(this.value);">
+                                        <option value="">Selecciona</option>
+                                        <option th:each="miPockemon : ${misPockemones}" 
+                                                th:value="${miPockemon.id}"
+                                                th:text="|${miPockemon.pockemon.nombre} ${miPockemon.pockemon.tipo} ${miPockemon.energia}|">
+                                        </option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div  id="oculto" hidden class="row justify-content-center">
+                        <div class="col-md-2 text-center">
+                            <h4 id="combatiente1" th:text="'Entrenador ' + ${nombreUsuario}"></h4>
+                            <h6>Nombre pockemon: <span id="nombre1"></span></h6>
+                            <h6>Ataque: <span id="ataque1"></span></h6>
+                            <h6>Potencia: <span id="potencia1"></span></h6>
+                            <h6>Energía: <span id="energia1"></span></h6>
+                            <h6 id="imagen1"></h6>
+                            <input type="hidden" id="pockemonId1">
+                            <input type="hidden" id="tipo1">
+                            <input type="hidden" id="debilidadNombre1">
+                            <input type="hidden" id="debilidadPotencia1">
+                            <input type="hidden" id="entrenadorId">
+                        </div>
+                        <div class="col-md-2">
+                            <button id="atacar" th:attr="onclick=|atacar();|"  class="btn btn-danger">Atacar</button>
+                        </div>
+                        <div class="d-flex col-md-1" style="height: 200px;">
+                            <div class="vr" id="vr" style="height: 200px;"></div>
+                        </div>
+                        <div class="col-md-2">
+                            <button id="atacando" hidden class="btn btn-primary">Atacando</button>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <h4 id="combatiente2" th:text="'Entrenador ' + ${contrincante}"></h4>
+                            <h6>Nombre pockemon: <span id="nombre2"></span></h6>
+                            <h6>Ataque: <span id="ataque2"></span></h6>
+                            <h6>Potencia: <span id="potencia2"></span></h6>
+                            <h6>Energía: <span id="energia2"></span></h6>
+                            <h6 id="imagen2"></h6>
+                            <input type="hidden" id="tipo2">
+                            <input type="hidden" id="debilidadNombre2">
+                            <input type="hidden" id="debilidadPotencia2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script  th:inline="javascript">
+            /*<![CDATA[*/
+            const seleccionPockemon = (value) => {
+                let path = /*[[@{/mi_pockemon/}]]*/;
+                let gimnasioId = /*[[${gimnasio.id}]]*/;
+                let option = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'false'
+                    },
+                    url: path + value + "/" + gimnasioId
+                };
+                $.ajax(option).done((response) => {
+                    document.getElementById("nombre1").innerHTML = response.pockemon1;
+                    document.getElementById("ataque1").innerHTML = response.ataqueNombre1;
+                    document.getElementById("potencia1").innerHTML = response.ataquePotencia1;
+                    document.getElementById("tipo1").value = response.tipo1;
+                    document.getElementById("energia1").innerHTML = response.energia1;
+                    document.getElementById("debilidadNombre1").value = response.debilidadNombre1;
+                    document.getElementById("debilidadPotencia1").value = response.debilidadPotencia1;
+                    document.getElementById("entrenadorId").value = response.entrenadorId;
+                    document.getElementById("pockemonId1").value = value;
+                    //document.getElementById("imagen1").value = response.imagen;
+
+                    document.getElementById("nombre2").innerHTML = response.pockemon2;
+                    document.getElementById("ataque2").innerHTML = response.ataqueNombre2;
+                    document.getElementById("potencia2").innerHTML = response.ataquePotencia2;
+                    document.getElementById("tipo2").value = response.tipo2;
+                    document.getElementById("energia2").innerHTML = response.energia2;
+                    document.getElementById("debilidadNombre2").value = response.debilidadNombre2;
+                    document.getElementById("debilidadPotencia2").value = response.debilidadPotencia2;
+
+                    document.getElementById("oculto").hidden = false;
+
+                    let form = document.getElementById('formData');
+                    while (form.firstChild) {
+                        form.removeChild(form.firstChild);
+                    }
+                });
+            }
+
+            const atacar = async () => {
+                
+                // Usuario
+                let potencia = document.getElementById("potencia1").innerHTML;
+                let tipo = document.getElementById("tipo1").value;
+                
+                // Contrincante Gimnasio
+                let tipo2 = document.getElementById("tipo2").value;
+                let energia2 = document.getElementById("energia2").innerHTML;
+                let debilidad2 = document.getElementById("debilidadNombre2").value;
+                let debilidadPotencia2 = document.getElementById("debilidadPotencia2").value;
+                
+                
+                let energiaContrincante = parseInt(energia2) - parseInt(potencia);
+                if(verificarDebilidad(tipo, debilidad2)){
+                    energiaContrincante = energiaContrincante - parseInt(debilidadPotencia2);
+                } 
+                
+                document.getElementById("energia2").innerHTML = energiaContrincante;
+                
+                if(energiaBaja(parseInt(energiaContrincante))){
+                    obtenerMedalla();
+                    let redirect = /*[[@{/medallas/}]]*/;
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Excelente!",
+                        html: "Haz ganado la partida",
+                        confirmButtonText: "Ok",
+                      }).then(() => {
+                        window.location = redirect;
+                      });
+                    return false;
+                }
+                document.getElementById("atacar").hidden = true;
+                document.getElementById("atacando").hidden = false;
+                await sleep(3000);
+                document.getElementById("atacando").hidden = true;
+                document.getElementById("atacar").hidden = false;
+
+                recibirAtaque();
+
+            }
+
+            const verificarDebilidad = (tipoAtacante, debilidad) =>{
+                if(tipoAtacante === debilidad){
+                    return true;
+                }
+                return false;
+            }
+
+            const recibirAtaque = () => {
+                // Contrincante
+                let potencia = document.getElementById("potencia2").innerHTML;
+                let tipo = document.getElementById("tipo2").value;
+
+                // Usuario
+                let tipo1 = document.getElementById("tipo1").value;
+                let energia1 = document.getElementById("energia1").innerHTML;
+                let debilidad1 = document.getElementById("debilidadNombre1").value;
+                let debilidadPotencia1 = document.getElementById("debilidadPotencia1").value;
+
+                let energiaContrincante = parseInt(energia1) - parseInt(potencia);
+                if(verificarDebilidad(tipo, debilidad1)){
+                    energiaContrincante = energiaContrincante - parseInt(debilidadPotencia1);
+                } 
+                
+                document.getElementById("energia1").innerHTML = energiaContrincante;
+                
+                if(energiaBaja(parseInt(energiaContrincante))){
+                    let redirect = /*[[@{/gimnasio/}]]*/;
+                    Swal.fire({
+                        icon: "info",
+                        title: "¡Haz perdido!",
+                        html: "Haz perdido la partida",
+                        confirmButtonText: "Ok",
+                      }).then(() => {
+                        window.location = redirect;
+                      });
+                    return false;
+                }
+            }
+
+            const energiaBaja = (energia) => {
+                if(energia < 10){
+                    return true;
+                }
+                return false;
+            }
+
+            const sleep = (ms) => {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            const obtenerMedalla = () => {
+                let entrenadorId = document.getElementById("entrenadorId").value;
+                let path = /*[[@{/mi_pockemon/medalla/}]]*/;
+                let gimnasioId = /*[[${gimnasio.id}]]*/;
+                let option = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'false'
+                    },
+                    url: path + entrenadorId + "/" + gimnasioId
+                };
+                $.ajax(option).done((response) => {
+                    console.log(response);
+                });
+            }
+            /*]]>*/
+        </script>
+    </div>
+</body>
+
+
+</html>

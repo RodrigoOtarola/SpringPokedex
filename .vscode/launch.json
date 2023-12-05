@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PockemonApplication<pockemon>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ciisa.pockemon.pockemon.PockemonApplication",
+            "projectName": "pockemon",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

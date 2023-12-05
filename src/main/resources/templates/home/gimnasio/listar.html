@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head>
+    <title>Bienvenido a pokemones ciisa</title>
+</head>
+
+<body>
+    <div layout:fragment="pagina">
+        <div class='card w-90'>
+            <div class="panel-heading"
+                style="background-color: #0D6EFD; justify-content: left;display: flex;align-items: center; height: 60px;">
+                <h3 class="panel-title center" style="color:white">
+                    &nbsp;&nbsp;<i class="bi bi-card-list"></i> Lista de gimnasios</h3>
+            </div>
+            <div class="col-md-12">
+                <div class='card-body'>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre Gimnasio</th>
+                                    <th scope="col">Nombre Entrenador</th>
+                                    <th scope="col">Medalla</th>
+                                    <th scope="col">Alias medalla</th>
+                                    <th scope="col">Combatir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="gimnasio : ${gimnasios}">
+                                    <td>*</td>
+                                    <td th:text="${gimnasio.nombreGimnasio}"></td>
+                                    <td th:text="${gimnasio.nombreEntrenador}"></td>
+                                    <td th:text="${gimnasio.nombreMedalla}"></td>
+                                    <td th:text="${gimnasio.aliasMedalla}"></td>
+                                    <td>
+                                        <a class="btn btn-info"
+                                           th:href="@{/gimnasio/combatir/} + ${gimnasio.id}"
+                                           th:classappend="${ #lists.contains(medallasEntrenador.![gimnasio.id], gimnasio.id)} ? 'disabled alt=Medalla obtenida' : ''">
+                                            <img th:src="@{/images/pockebola.svg}" width="20px" height="20px" alt="">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

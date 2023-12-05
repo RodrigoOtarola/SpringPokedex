@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head>
+    <title>Bienvenido a mantenimientos ciisa</title>  
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
+    <link th:href="@{/css/loginstyle.css}" rel="stylesheet">
+</head>
+
+<body>
+    <div layout:fragment="pagina">
+        <div class='card w-90'>
+            <div id="contenedor">
+                <div id="central">
+                    <div id="login">
+                        <div class="titulo">
+                            Bienvenido <img th:src="@{/images/pockebola.png}" width="80px" height="80px" alt="">
+                        </div>
+                        <form id="loginform" th:action="@{/register}" th:object="${entrenador}" th:method="POST">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" th:field="*{nombre}" placeholder="Nombre">
+                            <p th:if="${error_nombre}" style="color:red" th:text="${error_nombre}">Nombre Error</p>
+                            
+                            <label for="edad">Edad:</label>
+                            <input type="text" th:field="*{edad}" placeholder="Edad">
+                            <p th:if="${error_edad}" style="color:red" th:text="${error_edad}">Edad Error</p>
+                            
+                            <label for="username">Nombre de usuario:</label>
+                            <input type="text" th:field="*{username}" placeholder="Usuario">
+                            <p th:if="${error_username}" style="color:red" th:text="${error_username}">Usuario Error</p>
+                            
+                            <label for="password">Contraseña:</label>
+                            <input type="password" th:field="*{password}" placeholder="Contraseña">
+                            <p th:if="${error_password}" style="color:red" th:text="${error_password}">Contraseña Error</p>
+
+                            <button type="submit" title="Registrar">Registrar</button>
+                        </form>
+                    </div>
+                    <div class="inferior">
+                        <a th:href="@{/login}">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

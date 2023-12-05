@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ciisa.pockemon.pockemon.PockemonApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.194 s - in ciisa.pockemon.pockemon.PockemonApplicationTests
